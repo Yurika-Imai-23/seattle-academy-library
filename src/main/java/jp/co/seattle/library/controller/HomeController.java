@@ -39,9 +39,4 @@ public class HomeController {
 		return "home";
 	}
 
-	private void getedBooklist() {
-		// TODO 自動生成されたメソッド・スタブ
-
-	}
-
 }
