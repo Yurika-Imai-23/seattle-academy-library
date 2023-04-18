@@ -34,13 +34,11 @@ public class BookUtil {
 			errorList.add(REQUIRED_ERROR);
 		}
 		// ISBNのバリデーションチェック
-		if (isValidIsbn(bookInfo.getIsbn())) {
-		} else {
+		if (!isValidIsbn(bookInfo.getIsbn())) {
 			errorList.add(ISBN_ERROR);
 		}
 		// 出版日の形式チェック
-		if (checkDate(bookInfo.getPublishDate())) {
-		} else {
+		if (!checkDate(bookInfo.getPublishDate())) {
 			errorList.add(PUBLISHDATE_ERROR);
 		}
 		return errorList;
