@@ -3,6 +3,7 @@ package jp.co.seattle.library.commonutil;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,18 +26,21 @@ public class BookUtil {
 	 * @return errorList エラーメッセージのリスト
 	 */
 	public List<String> checkBookInfo(BookDetailsInfo bookInfo) {
-		
+
 		//TODO　各チェックNGの場合はエラーメッセージをリストに追加（タスク４）
 		List<String> errorList = new ArrayList<>();
 		// 必須チェック
-
-		
+		if (isEmptyBookInfo(bookInfo)) {
+			errorList.add(REQUIRED_ERROR);
+		}
 		// ISBNのバリデーションチェック
-
-
+		if (!isValidIsbn(bookInfo.getIsbn())) {
+			errorList.add(ISBN_ERROR);
+		}
 		// 出版日の形式チェック
-
-
+		if (!checkDate(bookInfo.getPublishDate())) {
+			errorList.add(PUBLISHDATE_ERROR);
+		}
 		return errorList;
 	}
 
@@ -48,11 +52,17 @@ public class BookUtil {
 	 */
 	private static boolean checkDate(String publishDate) {
 		try {
-			DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+			DateFormat formatter = new SimpleDateFormat("yyyyMMdd");//日付チェックのためには入力された文字列を指定されたフォーマットで日付型に変換する必要がある
 			formatter.setLenient(false); // ←これで厳密にチェックしてくれるようになる
 			//TODO　取得した日付の形式が正しければtrue（タスク４）
-			
-			return true;
+			Date publishDate2 = formatter.parse(publishDate);//日付型(Date型)に変換する
+			String publishDate3 = formatter.format(publishDate2);//String型に変換して
+			if (publishDate.equals(publishDate3)) { //String型の入力情報と、String型のpublishDate2を比較する
+				return true;
+			} else {
+				return false;
+			}
+
 		} catch (Exception p) {
 			p.printStackTrace();
 			return false;
@@ -67,8 +77,15 @@ public class BookUtil {
 	 */
 	private static boolean isValidIsbn(String isbn) {
 		//TODO　ISBNが半角数字で10文字か13文字であればtrue（タスク４）
-		
-		return true;
+		if (!isbn.isEmpty()) {
+			if (isbn.matches("^[0-9]*$") && (isbn.length() == 10 || isbn.length() == 13)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -79,7 +96,12 @@ public class BookUtil {
 	 */
 	private static boolean isEmptyBookInfo(BookDetailsInfo bookInfo) {
 		//TODO　タイトル、著者、出版社、出版日のどれか一つでもなかったらtrue（タスク４）
-		
-		return true;
+		if ((!bookInfo.getTitle().isEmpty()) && (!bookInfo.getAuthor().isEmpty())
+				&& (!bookInfo.getPublisher().isEmpty())
+				&& (!bookInfo.getPublishDate().isEmpty())) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
