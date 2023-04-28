@@ -31,6 +31,8 @@
             </div>
             <div class="authorization_navi">
                 <label class="authorization_text">まだアカウントをお持ちでないですか？</label> <a class="authorization_link marker" href="<%=request.getContextPath()%>/newAccount">アカウント作成</a>
+            	<form action="passwordReset" method="post">
+            	<button type="submit" name="submit">パスワードリセット</button>
             </div>
         </div>
         <footer>
